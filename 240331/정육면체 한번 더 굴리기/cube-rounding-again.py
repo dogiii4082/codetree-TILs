@@ -24,38 +24,43 @@ def score(x, y, visited):
 
     return cnt
 
-def roll(direction):
+def roll(dir):
     global dice
     global dice_loc
+    global direction
 
-    if direction == 1:      # [4, 2, 1, 6, 5, 3]
+    if dir == 1:      # [4, 2, 1, 6, 5, 3]
         if dice_loc[1] + 1 >= n:
             dice[0], dice[2], dice[3], dice[5] = dice[2], dice[5], dice[0], dice[3]
             dice_loc = [dice_loc[0], dice_loc[1]-1]
+            direction = 3
         else:
             dice[0], dice[2], dice[3], dice[5] = dice[3], dice[0], dice[5], dice[2]
             dice_loc = [dice_loc[0], dice_loc[1]+1]
 
-    elif direction == 2:    # [5, 1, 3, 4, 6, 2]
+    elif dir == 2:    # [5, 1, 3, 4, 6, 2]
         if dice_loc[0] + 1 >= n:
             dice[0], dice[1], dice[4], dice[5] = dice[1], dice[5], dice[0], dice[4]
             dice_loc = [dice_loc[0]-1, dice_loc[1]]
+            direction = 4
         else:
             dice[0], dice[1], dice[4], dice[5] = dice[4], dice[0], dice[5], dice[1]
             dice_loc = [dice_loc[0]+1, dice_loc[1]]
 
-    elif direction == 3:    # [3, 2, 6, 1, 5, 4]
-        if dice_loc[1] - 1 >= n:
+    elif dir == 3:    # [3, 2, 6, 1, 5, 4]
+        if dice_loc[1] - 1  < 0:
             dice[0], dice[2], dice[3], dice[5] = dice[3], dice[0], dice[5], dice[2]
             dice_loc = [dice_loc[0], dice_loc[1]+1]
+            direction = 1
         else:
             dice[0], dice[2], dice[3], dice[5] = dice[2], dice[5], dice[0], dice[3]
             dice_loc = [dice_loc[0], dice_loc[1]-1]
 
-    elif direction == 4:    # [2, 6, 3, 4, 1, 5]
-        if dice_loc[0] - 1 >= n:
+    elif dir == 4:    # [2, 6, 3, 4, 1, 5]
+        if dice_loc[0] - 1 < 0:
             dice[0], dice[1], dice[4], dice[5] = dice[4], dice[0], dice[5], dice[1]
             dice_loc = [dice_loc[0]+1, dice_loc[1]]
+            direction = 2
         else:
             dice[0], dice[1], dice[4], dice[5] = dice[1], dice[5], dice[0], dice[4]
             dice_loc = [dice_loc[0]-1, dice_loc[1]]
@@ -77,29 +82,29 @@ if __name__ == '__main__':
     for _ in range(m-1):
         if dice[-1] > board[dice_loc[0]][dice_loc[1]]:      # 시계 방향
             if direction == 4:
-                roll(1)
+                direction = 1
+                roll(direction)
                 ans += score(dice_loc[0], dice_loc[1], visited)
                 visited = [[False for _ in range(n)] for _ in range(n)]
-                direction = 1
 
             else:
-                roll(direction+1)
+                direction += 1
+                roll(direction)
                 ans += score(dice_loc[0], dice_loc[1], visited)
                 visited = [[False for _ in range(n)] for _ in range(n)]
-                direction += 1
 
         elif dice[-1] < board[dice_loc[0]][dice_loc[1]]:    # 반시계 방향
             if direction == 1:
-                roll(4)
+                direction = 4
+                roll(direction)
                 ans += score(dice_loc[0], dice_loc[1], visited)
                 visited = [[False for _ in range(n)] for _ in range(n)]
-                direction = 4
                 
             else:
-                roll(direction-1)
+                direction -= 1
+                roll(direction)
                 ans += score(dice_loc[0], dice_loc[1], visited)
                 visited = [[False for _ in range(n)] for _ in range(n)]
-                direction -= 1
         
         else:   # 그대로
             roll(direction)
