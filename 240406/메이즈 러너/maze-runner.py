@@ -18,6 +18,7 @@ def move(person):
         if nx < 1 or nx > N or ny < 1 or ny > N: continue
         if board[nx][ny] != 0: continue
 
+        # print(ex, ey, nx, ny, '!!!!!!!!!')
         if dist(ex, ey, nx, ny) < dist(ex, ey, x, y):
             ans += 1
             return nx, ny
@@ -32,7 +33,8 @@ def is_contain_both(x, y, d):
         for c in range(y, y+d):
             for px, py in people:
                 if px == ex and py == ey: continue
-                if x <= px <= x+d-1 and y <= py <= y+d-1: is_person = True
+                if x <= px <= x+d-1 and y <= py <= y+d-1:
+                    is_person = True
             if r == ex and c == ey:
                 is_exit = True
 
@@ -67,10 +69,24 @@ if __name__ == "__main__":
 
     ans = 0
     for _ in range(K):
+        # print(_+1, "@@@@@@@@@@@")
+        # print(people)
         for idx, person in enumerate(people):
             if person[0] == ex and person[1] == ey: continue
             nx, ny = move(person)
+            # if nx == ex and ny == ey:
+            #     people = people[:idx] + people[idx+1:]
+            # else:
             people[idx] = [nx, ny]
+
+        is_all_escaped = True
+        for px, py in people:
+            if px != ex or py != ey:
+                is_all_escaped = False
+
+        # 만약 모든 사람이 출구로 탈출했으면 바로 종료합니다.
+        if is_all_escaped: 
+            break
 
         lx, ly, d = int(1e9), int(1e9), int(1e9)
         for _d in range(2, N+1):
@@ -78,7 +94,7 @@ if __name__ == "__main__":
                 for y in range(1, N-_d+2):
                     if is_contain_both(x, y, _d) and x < lx and y < ly and _d < d:
                         lx, ly, d = x, y, _d
-
+        # print(lx, ly, d)
         board = rotate(lx, ly, d)               # 판 회전
         for idx, person in enumerate(people):   # 사람 회전
             x, y = person
@@ -92,5 +108,9 @@ if __name__ == "__main__":
         rx, ry = oy, d - ox - 1
         ex, ey = rx + lx, ry + ly
 
+        # print(board)
+        # print(people)
+        # print("EXIT", ex, ey)
+        # print("rotate", lx, ly, d)
     print(ans)
     print(ex, ey)
