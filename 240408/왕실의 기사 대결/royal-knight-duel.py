@@ -148,6 +148,8 @@ def move(id, d, knights, knight_board):
         i = q.popleft()
         r, c, h, w, k = temp_knights[i]
 
+        if k <= 0: continue
+
         nr = r + dr[d]
         nc = c + dc[d]
 
@@ -158,7 +160,7 @@ def move(id, d, knights, knight_board):
             for y in range(nc, nc+w):
                 if board[x][y] == 1 and i != id:
                     k -= 1
-                    if k != 0: ans += 1
+                    # if k != 0: ans += 1
         
         temp_knights[i] = [nr, nc, h, w, k]
         
@@ -196,6 +198,7 @@ if __name__ == "__main__":
         for i in range(r, r+h):
             for j in range(c, c+w):
                 knight_board[i][j] = n
+    init_knights = copy.deepcopy(knights)
     orders = [list(map(int, input().split())) for _ in range(Q)]
 
 
@@ -205,4 +208,11 @@ if __name__ == "__main__":
         # damage()
         # print(knights)
         # print(knight_board)
+    # print(init_knights)
+    # print(knights)
+    for i in range(1, N+1):
+        _, _, _, _, ik = init_knights[i]
+        _, _, _, _, k = knights[i]
+        if k <= 0: continue
+        ans += (ik - k)
     print(ans)
