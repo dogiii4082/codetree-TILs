@@ -41,12 +41,13 @@ def get_base(sx, sy):   # 2, 3
 
             if board[x][y] == 1 and dist(x, y, sx, sy) < m_dist:
                 bx, by = x, y
-                m_dist = dist(x, y, sx, sy)
+                m_dist = dist(sx, sy, x, y)
 
     return bx, by   # 1, 2
 
 
 def act_1():
+    cant = []
     for idx, [px, py] in enumerate(people[1:]):
         if is_end[idx+1]: continue
         if px < 1 or px > n or py < 1 or py > n: continue
@@ -68,8 +69,10 @@ def act_1():
 
         if [tx, ty] == [sx, sy]:
             is_end[idx+1] = True
-            board[sx][sy] = -int(1e9)
-
+            cant.append([sx, sy])
+            # board[sx][sy] = -int(1e9)
+    for x, y in cant:
+        board[x][y] = -int(1e9)
 
 
 if __name__ == "__main__":
@@ -99,9 +102,12 @@ if __name__ == "__main__":
 
         act_1()
 
+        cant = []
         if t <= m:
             bx, by = get_base(stores[t][0], stores[t][1])
-            board[bx][by] = -int(1e9)
+            # board[bx][by] = -int(1e9)
+            cant.append([bx, by])
             people[t] = [bx, by]
-
+        for x, y in cant:
+            board[x][y] = -int(1e9)
     print(t)
