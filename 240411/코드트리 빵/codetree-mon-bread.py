@@ -12,6 +12,8 @@ def get_base(sx, sy):   # 2, 3
 
     for x in range(1, n+1):
         for y in range(1, n+1):
+            if board[x][y] == -int(1e9): continue
+
             if board[x][y] == 1 and dist(x, y, sx, sy) < m_dist:
                 bx, by = x, y
                 m_dist = dist(x, y, sx, sy)
