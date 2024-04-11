@@ -1,10 +1,35 @@
+from collections import deque
+
+
 dr = [1, 0, 0, -1]
 dc = [0, 1, -1, 0]
 
 
 def dist(r1, c1, r2, c2):
-    return abs(r1-r2) + abs(c1-c2)
+    visited = [[False for _ in range(n+1)] for _ in range(n+1)]
+    dist_board = [[float('inf') for _ in range(n+1)] for _ in range(n+1)]
 
+    q = deque([(r1, c1)])
+    visited[r1][c1] = True
+    dist_board[r1][c1] = 0
+
+    while q:
+        x, y = q.popleft()
+
+        for i in range(4):
+            nx = x + dr[i]
+            ny = y + dc[i]
+
+            if nx < 1 or nx > n or ny < 1 or ny > n: continue
+            if visited[nx][ny]: continue
+            if board[nx][ny] == -int(1e9): continue
+
+            visited[nx][ny] = True
+            q.append((nx, ny))
+            dist_board[nx][ny] = dist_board[x][y] + 1
+
+    # return abs(r1-r2) + abs(c1-c2)
+    return dist_board[r2][c2]
 
 def get_base(sx, sy):   # 2, 3
     bx, by = 0, 0
@@ -23,6 +48,7 @@ def get_base(sx, sy):   # 2, 3
 
 def act_1():
     for idx, [px, py] in enumerate(people[1:]):
+        if is_end[idx+1]: continue
         if px < 1 or px > n or py < 1 or py > n: continue
 
         m_dist = int(1e9)
@@ -67,6 +93,7 @@ if __name__ == "__main__":
     t = 0
     while True:
         if all(is_end): break
+        # if t == 5: break
 
         t += 1
 
