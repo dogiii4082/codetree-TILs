@@ -31,6 +31,7 @@ def act_1():
             ny = py + dc[i]
 
             if nx < 1 or nx > n or ny < 1 or ny > n: continue
+            if board[nx][ny] == -int(1e9): continue
 
             if dist(nx, ny, sx, sy) <= m_dist:
                 m_dist = dist(nx, ny, sx, sy)
