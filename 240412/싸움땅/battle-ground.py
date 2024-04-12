@@ -95,7 +95,7 @@ def move(x, y, d, s, i):
                     board[nnx][nny].pop(board[nnx][nny].index(M))
                 break
         else:
-            players[lose] = [nnx, nny, d, players[lose][3]]
+            players[lose] = [nnx, nny, players[lose][2], players[lose][3]]
             if board[nnx][nny]:
                 M = max(board[nnx][nny])
                 guns[lose] = M
