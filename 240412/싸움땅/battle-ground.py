@@ -11,6 +11,7 @@ oppo = {
 
 
 def battle(ids):
+    # print(ids)
     global points
 
     a, b = ids
@@ -69,8 +70,8 @@ def move(x, y, d, s, i):
         nnx = nx + dx[players[lose][2]]
         nny = ny + dy[players[lose][2]]
 
+        cnt_players = 0
         try:
-            cnt_players = 0
             for u in range(1, m + 1):
                 x, y, _, _ = players[u]
                 if x == nnx and y == nny: cnt_players += 1
@@ -87,7 +88,7 @@ def move(x, y, d, s, i):
                     x, y, _, _ = players[w]
                     if x == nnx and y == nny: cnt_players += 1
 
-                if cnt_players > 1 or nnx < 1 or nnx > n or nny < 1 or nny > n: continue
+                if cnt_players > 0 or nnx < 1 or nnx > n or nny < 1 or nny > n: continue
                 players[lose] = [nnx, nny, q % 4, players[lose][3]]
                 if any(board[nnx][nny]):
                     M = max(board[nnx][nny])
