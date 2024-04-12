@@ -14,8 +14,6 @@ def battle(ids):
     global points
 
     a, b = ids
-    # winner = 0
-    # loser = 0
 
     if S[a] + guns[a] == S[b] + guns[b]:
         winner, loser = (a, b) if S[a] > S[b] else (b, a)
@@ -23,6 +21,7 @@ def battle(ids):
         winner, loser = (a, b) if S[a] + guns[a] > S[b] + guns[b] else (b, a)
 
     points[winner] += abs((S[a] + guns[a]) - (S[b] + guns[b]))
+
     return winner, loser
 
 
@@ -47,7 +46,7 @@ def move(x, y, d, s, i):
         if x == nx and y == ny: cnt_players += 1
 
     if cnt_players == 1:    # 플레이어가 없다면
-        if board[nx][ny] != [0] and board[nx][ny]:   # 총이 있으면
+        if any(board[nx][ny]):   # 총이 있으면
             if guns[i]:     # 플레이어가 이미 총 가지고 있으면
                 temp = board[nx][ny] + [guns[i]]
                 M = max(temp)
@@ -57,9 +56,6 @@ def move(x, y, d, s, i):
             else:           # 플레이어가 총 없으면
                 guns[i] = max(board[nx][ny])
                 board[nx][ny].pop(board[nx][ny].index(guns[i]))
-        # print(board)
-        # print(guns)
-        # print(players)
 
     else:   # 플레이어 있으면 배틀
         tmp = []
@@ -93,7 +89,7 @@ def move(x, y, d, s, i):
 
                 if cnt_players > 1 or nnx < 1 or nnx > n or nny < 1 or nny > n: continue
                 players[lose] = [nnx, nny, q % 4, players[lose][3]]
-                if board[nnx][nnx] != [0] and board[nnx][nnx] != []:
+                if any(board[nnx][nny]):
                     M = max(board[nnx][nny])
                     guns[lose] = M
                     board[nnx][nny].pop(board[nnx][nny].index(M))
@@ -136,8 +132,12 @@ if __name__ == "__main__":
     guns = [0 for _ in range(m+1)]
     points = [0 for _ in range(m+1)]
     for _ in range(k):
+        # print(_+1, '@@@@@@')
         for i in range(1, m+1):
             x, y, d, s = players[i]
 
             move(x, y, d, s, i)
+        # print(board)
+        # print('guns', guns)
+        # print('players', players)
     print(*points[1:])
