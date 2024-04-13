@@ -84,7 +84,7 @@ def move_seeker_blue(x, y):
 
 
 def catch(x, y, d):
-    global hiders
+    global hiders, hider_d
 
     cnt = 0
 
@@ -96,11 +96,18 @@ def catch(x, y, d):
 
         if [tx, ty] in trees: continue
 
+        hider_tmp = []
+        hider_d_tmp = []
         for idx, [hx, hy] in enumerate(hiders):
             if [hx, hy] == [tx, ty]:
                 cnt += 1
-                hiders.pop(idx)
-                hider_d.pop(idx)
+                # hiders.pop(idx)
+                # hider_d.pop(idx)
+            else:
+                hider_tmp.append([hx, hy])
+                hider_d_tmp.append(d)
+        hiders = hider_tmp
+        hider_d = hider_d_tmp
 
     return cnt
 
@@ -136,9 +143,8 @@ if __name__ == "__main__":
         else:
             sx, sy = move_seeker_blue(sx, sy)
 
-        # if sx == 1 and sy == 1: continue
-
         cnt = catch(sx, sy, sd)
         ans += t * cnt
+        # print(sx, sy, sd)
 
     print(ans)
