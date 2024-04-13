@@ -96,25 +96,20 @@ def catch(x, y, d):
 
         if [tx, ty] in trees: continue
 
+        hiders_tmp = []
+        hider_d_tmp = []
         for idx, [hx, hy] in enumerate(hiders):
+            # print(hx, hy, tx, ty)
             if [hx, hy] == [tx, ty]:
                 cnt += 1
-                ind = hiders.index([hx, hy])
-                hiders.pop(ind)
-                hider_d.pop(ind)
-    # hider_tmp = []
-    # for hider in hiders:
-    #     if hider != []:
-    #         hider_tmp.append(hider)
-    #
-    # hider_d_tmp = []
-    # for d_tmp in hider_d:
-    #     if d_tmp != -1:
-    #         hider_d_tmp.append(d_tmp)
-    #
-    # hiders = hider_tmp
-    # hider_d = hider_d_tmp
-
+                # ind = hiders.index([tx, ty])
+                # hiders.pop(ind)
+                # hider_d.pop(ind)
+            else:
+                hiders_tmp.append([hx, hy])
+                hider_d_tmp.append(hider_d[idx])
+        hiders = hiders_tmp
+        hider_d = hider_d_tmp
     return cnt
 
 
@@ -142,6 +137,7 @@ if __name__ == "__main__":
     ans = 0
     red = True
     for t in range(1, k + 1):
+        # print(t, '@@@@@@@@@@@@')
         hiders = move_hider(hiders)
 
         if red:
@@ -149,8 +145,10 @@ if __name__ == "__main__":
         else:
             sx, sy = move_seeker_blue(sx, sy)
 
+        # print('hiders', hiders)
+        # print('hider_d', hider_d)
+        # print('sx, sy, sd', sx, sy, sd)
         cnt = catch(sx, sy, sd)
         ans += t * cnt
-        # print(sx, sy, sd)
 
     print(ans)
