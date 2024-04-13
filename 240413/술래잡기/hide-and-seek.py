@@ -34,26 +34,33 @@ def move_hider(hiders):
     return hiders
 
 
-def move_seeker(x, y):
-    global sd
+def move_seeker(x, y, sd):
+    # global sd
 
     nx = x + dx[sd]
     ny = y + dy[sd]
+    nd = sd
 
     if nx + 1 == ny and nx < center:  # to right
-        sd = 1
+        # sd = 1
+        nd = 1
     elif nx + ny == n + 1 and nx < center:  # to down
-        sd = 2
+        # sd = 2
+        nd = 2
     elif nx == ny and nx > center:  # to left
-        sd = 3
+        # sd = 3
+        nd = 3
     elif nx + ny == n + 1 and nx > center:  # to up
-        sd = 0
+        # sd = 0
+        nd = 0
     elif nx == 1 and ny == 1:
-        sd = 2
+        # sd = 2
+        nd = 2
     elif nx == center and ny == center:
-        sd = 0
+        # sd = 0
+        nd = 0
 
-    return nx, ny
+    return nx, ny, nd
 
 
 def catch(x, y, d):
@@ -103,7 +110,7 @@ if __name__ == "__main__":
     for t in range(1, k + 1):
         hiders = move_hider(hiders)
 
-        sx, sy = move_seeker(sx, sy)
+        sx, sy, sd = move_seeker(sx, sy, sd)
 
         cnt = catch(sx, sy, sd)
         ans += t * cnt
