@@ -34,8 +34,9 @@ def move_hider(hiders):
     return hiders
 
 
-def move_seeker(x, y):
+def move_seeker_red(x, y):
     global sd
+    global red
 
     nx = x + dx[sd]
     ny = y + dy[sd]
@@ -50,10 +51,36 @@ def move_seeker(x, y):
         sd = 0
     elif nx == 1 and ny == 1:
         sd = 2
-    elif nx == center and ny == center:
-        sd = 0
+        red = False
+    # elif nx == center and ny == center:
+    #     sd = 0
 
     return nx, ny
+
+
+def move_seeker_blue(x, y):
+    global sd
+    global red
+
+    nx = x + dx[sd]
+    ny = y + dy[sd]
+
+    if nx + 1 == ny and nx < center:  # to down
+        sd = 2
+    elif nx + ny == n + 1 and nx < center:  # to left
+        sd = 3
+    elif nx == ny and nx > center:  # to up
+        sd = 0
+    elif nx + ny == n + 1 and nx > center:  # to right
+        sd = 1
+    # elif nx == 1 and ny == 1:
+    #     sd = 2
+    elif nx == center and ny == center:
+        sd = 0
+        red = True
+
+    return nx, ny
+
 
 
 def catch(x, y, d):
@@ -100,13 +127,17 @@ if __name__ == "__main__":
         trees.append([x, y])
 
     ans = 0
+    red = True
     for t in range(1, k + 1):
         hiders = move_hider(hiders)
 
-        sx, sy = move_seeker(sx, sy)
+        if red:
+            sx, sy = move_seeker_red(sx, sy)
+        else:
+            sx, sy = move_seeker_blue(sx, sy)
 
-        if sx == 1 and sy == 1: continue
-        
+        # if sx == 1 and sy == 1: continue
+
         cnt = catch(sx, sy, sd)
         ans += t * cnt
 
