@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
         sx, sy = move_seeker(sx, sy)
 
-        if sx == center and sy == center: continue
+        if sx == 1 and sy == 1: continue
         
         cnt = catch(sx, sy, sd)
         ans += t * cnt
