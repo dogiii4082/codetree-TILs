@@ -59,7 +59,7 @@ def move_seeker(x, y):
         temp_d = 2
     elif nx == center and ny == center:
         # sd = 0
-        tmep_d = 0
+        temp_d = 0
 
     return nx, ny, temp_d
 
