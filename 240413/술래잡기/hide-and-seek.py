@@ -96,18 +96,25 @@ def catch(x, y, d):
 
         if [tx, ty] in trees: continue
 
-        hider_tmp = []
-        hider_d_tmp = []
         for idx, [hx, hy] in enumerate(hiders):
             if [hx, hy] == [tx, ty]:
                 cnt += 1
                 # hiders.pop(idx)
                 # hider_d.pop(idx)
-            else:
-                hider_tmp.append([hx, hy])
-                hider_d_tmp.append(d)
-        hiders = hider_tmp
-        hider_d = hider_d_tmp
+                hiders[idx] = []
+                hider_d[idx] = -1
+                hider_tmp = []
+                for hider in hiders:
+                    if hider != []:
+                        hider_tmp.append(hider)
+
+                hider_d_tmp = []
+                for d_tmp in hider_d:
+                    if d_tmp != -1:
+                        hider_d_tmp.append(d_tmp)
+
+                hiders = hider_tmp
+                hider_d = hider_d_tmp
 
     return cnt
 
