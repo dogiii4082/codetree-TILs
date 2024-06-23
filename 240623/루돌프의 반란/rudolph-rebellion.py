@@ -63,7 +63,7 @@ def interaction(another, d):
     Sc[another] += dy[d]
 
     if Sr[another] < 1 or Sr[another] > N or Sc[another] < 1 or Sc[another] > N:
-        is_end = True
+        is_end[another] = True
 
     other = is_another_santa(Sr[another], Sc[another], another)
     if other:
