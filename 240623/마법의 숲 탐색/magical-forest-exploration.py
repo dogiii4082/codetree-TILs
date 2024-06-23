@@ -6,9 +6,9 @@ from collections import deque
 
 
 def BFS(r, c):
-    visited = [[False for _ in range(Y)] for _ in range(X)]
+    visited = [[False for _ in range(Y)] for _ in range(X+3)]
 
-    result = r
+    result = r-2
     q = deque([(r, c)])
     visited[r][c] = True
     while q:
@@ -18,19 +18,19 @@ def BFS(r, c):
             nx = x + dx[d]
             ny = y + dy[d]
 
-            if nx < 0 or nx >= X or ny < 0 or ny >= Y: continue
+            if nx < 0 or nx >= X+3 or ny < 0 or ny >= Y: continue
             if board[nx][ny] == 0 or visited[nx][ny]: continue
 
             if board[nx][ny] == board[x][y] or is_exit[x][y]:
                 q.append((nx, ny))
                 visited[nx][ny] = True
-                result = max(result, nx+1)
+                result = max(result, nx-2)
 
     return result
 
 
 def reset():
-    for x in range(X):
+    for x in range(X+3):
         for y in range(Y):
             board[x][y] = 0
             is_exit[x][y] = False
@@ -41,28 +41,28 @@ def move(i):
 
     c = C[i]
 
-    r = -2
-    while r <= X-3:
+    r = 1
+    while r <= X:
 
         # 밑으로 내려갈 수 있음
         if board[r+2][c] == 0 and board[r+1][c-1] == 0 and board[r+1][c+1] == 0:
             r += 1
 
         # 서쪽 아래로
-        elif (board[r+2][c] != 0 or board[r+1][c-1] != 0 or board[r+1][c+1] != 0) and c-2 >= 0 and r+2 <= X-1 and board[r-1][c-1] == 0 and board[r][c-2] == 0 and board[r+1][c-1] == 0 and board[r+1][c-2] == 0 and board[r+2][c-1] == 0:
+        elif (board[r+2][c] != 0 or board[r+1][c-1] != 0 or board[r+1][c+1] != 0) and c-2 >= 0 and r+2 <= X+2 and board[r-1][c-1] == 0 and board[r][c-2] == 0 and board[r+1][c-1] == 0 and board[r+1][c-2] == 0 and board[r+2][c-1] == 0:
             r += 1
             c -= 1
             D[i] = (D[i] + 3) % 4
 
         # 동쪽 아래로
-        elif (board[r+2][c] != 0 or board[r+1][c-1] != 0 or board[r+1][c+1] != 0) and c+2 <= Y-1 and r+2 <= X-1 and board[r-1][c+1] == 0 and board[r][c+2] == 0 and board[r+1][c+1] == 0 and board[r+1][c+2] == 0 and board[r+2][c+1] == 0:
+        elif (board[r+2][c] != 0 or board[r+1][c-1] != 0 or board[r+1][c+1] != 0) and c+2 <= Y-1 and r+2 <= X+2 and board[r-1][c+1] == 0 and board[r][c+2] == 0 and board[r+1][c+1] == 0 and board[r+1][c+2] == 0 and board[r+2][c+1] == 0:
             r += 1
             c += 1
             D[i] = (D[i] + 1) % 4
 
         # 다 불가능
         else:
-            if r-1 < 0:     # 골렘의 일부가 밖에
+            if r-1 < 3:     # 골렘의 일부가 밖에
                 reset()
                 return
             break
@@ -77,11 +77,11 @@ def move(i):
 
 if __name__ == "__main__":
     X, Y, K = map(int, input().split())
-    board = [[0 for _ in range(Y)]]
+    board = [[0 for _ in range(Y)] for _ in range(3)]
     for _ in range(X):
         board.append([0 for _ in range(Y)])
     C = []; D = []  # D: [북, 동, 남, 서]
-    is_exit = [[False for _ in range(Y)] for _ in range(X)]
+    is_exit = [[False for _ in range(Y)] for _ in range(X+3)]
     ans = 0
     for _ in range(K):
         c, d = map(int, input().split())
