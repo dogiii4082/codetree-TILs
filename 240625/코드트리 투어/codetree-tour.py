@@ -224,7 +224,15 @@ if __name__ == "__main__":
 
         elif op == 300:
             t = tmp[1]
-            poss[t] = False
+            found = False
+            for i in range(len(q)):
+                if q[i][1] == t:
+                    poss[t] = False
+                    found = True
+                    break
+
+            if not found:
+                poss[t] = False
 
         elif op == 400:
             temp_q = []
