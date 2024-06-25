@@ -124,7 +124,7 @@ if __name__ == "__main__":
         tmp = list(map(int, input().split()))
         board.append([0]+tmp)
 
-    attack_time = [[0 for _ in range(M+1)] for _ in range(N+1)]
+    attack_time = [[-1 for _ in range(M+1)] for _ in range(N+1)]
     for t in range(K):
         relate_attack = [[False for _ in range(M+1)] for _ in range(N+1)]
 
