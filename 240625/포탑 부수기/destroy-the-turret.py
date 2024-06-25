@@ -28,26 +28,6 @@ def pick_target(attacker_x, attacker_y):
 
     return q[0][-2], q[0][-1]
 
-#
-# def distance(r1, c1, r2, c2):
-#     q = deque([r1, c1])
-#     visited = [[float('inf') for _ in range(M)] for _ in range(N)]
-#     visited[r1][c1] = 0
-#     while q:
-#         x, y = q.popleft()
-#
-#         for i in range(4):
-#             nx = x + dx[i]
-#             ny = y + dy[i]
-#
-#             if nx < 0 or nx >= N or ny < 0 or ny >= M: continue
-#             if visited[nx][ny] != float('inf') or board[nx][ny] == 0: continue
-#
-#             q.append((nx, ny))
-#             visited[nx][ny] += 1
-#
-#     return visited[r2][c2]
-
 
 def laser(attacker_x, attacker_y):
     target_x, target_y = pick_target(attacker_x, attacker_y)
@@ -92,6 +72,7 @@ def bomb(attacker_x, attacker_y):
     relate_attack[attacker_x][attacker_y] = True
     attack_time[attacker_x][attacker_y] = t
     board[target_x][target_y] -= board[attacker_x][attacker_y]
+    relate_attack[target_x][target_y] = True
 
     for i in range(8):
         nx = (target_x + dx[i]) % N
