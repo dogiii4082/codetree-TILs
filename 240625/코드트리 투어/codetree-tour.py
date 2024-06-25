@@ -1,25 +1,23 @@
 import heapq
 
-def dijkstra(graph, start):
-    n = len(graph)
-    dist = [float('inf')] * n
-    dist[start] = 0
-    q = [(0, start)]
 
-    while q:
-        curr_w, curr_v = heapq.heappop(q)
-        if curr_w > dist[curr_v]:
-            continue
-        for cand_w, cand_u in graph[curr_v]:
-            new_dist = curr_w + cand_w
-            if new_dist < dist[cand_u]:
-                dist[cand_u] = new_dist
-                heapq.heappush(q, (new_dist, cand_u))
+def floyd_warshall(graph, n):
+    dist = [[float('inf')] * n for _ in range(n)]
+    for i in range(n):
+        dist[i][i] = 0
+        for w, j in graph[i]:
+            dist[i][j] = min(dist[i][j], w)
+
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
 
     return dist
 
+
 if __name__ == "__main__":
-    Q = int(input().strip())
+    Q = int(input())
 
     graph = {}
     n, m = 0, 0
@@ -28,7 +26,7 @@ if __name__ == "__main__":
     distances = None
 
     for _ in range(Q):
-        tmp = list(map(int, input().strip().split()))
+        tmp = list(map(int, input().split()))
         op = tmp[0]
 
         if op == 100:
@@ -38,11 +36,11 @@ if __name__ == "__main__":
                 v, u, w = tmp[i], tmp[i + 1], tmp[i + 2]
                 graph[v].append((w, u))
                 graph[u].append((w, v))
-            distances = dijkstra(graph, start)
+            distances = floyd_warshall(graph, n)
 
         elif op == 200:
             id, revenue, dest = tmp[1], tmp[2], tmp[3]
-            travel_cost = distances[dest]
+            travel_cost = distances[start][dest]
             benefit = revenue - travel_cost
             heapq.heappush(tickets, (-benefit, id, dest, revenue))
 
@@ -63,13 +61,10 @@ if __name__ == "__main__":
                     heapq.heappush(tickets, (benefit, id, dest, revenue))
 
         elif op == 500:
-            new_start = tmp[1]
-            if new_start != start:
-                start = new_start
-                distances = dijkstra(graph, start)
-                new_tickets = []
-                for _, id, dest, revenue in tickets:
-                    travel_cost = distances[dest]
-                    benefit = revenue - travel_cost
-                    heapq.heappush(new_tickets, (-benefit, id, dest, revenue))
-                tickets = new_tickets
+            start = tmp[1]
+            new_tickets = []
+            for _, id, dest, revenue in tickets:
+                travel_cost = distances[start][dest]
+                benefit = revenue - travel_cost
+                heapq.heappush(new_tickets, (-benefit, id, dest, revenue))
+            tickets = new_tickets
