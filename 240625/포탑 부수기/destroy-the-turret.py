@@ -3,14 +3,14 @@ from collections import deque
 
 
 dx = [0, 1, 0, -1, -1, -1, 1, 1]
-dy = [1, 0, -1, 0, 1, 1, -1, -1]
+dy = [1, 0, -1, 0, -1, 1, 1, -1]
 
 
 def pick_attacker():
     q = []
     for x in range(1, N+1):
         for y in range(1, M+1):
-            if board[x][y] == 0: continue
+            if board[x][y] <= 0: continue
 
             heapq.heappush(q, (board[x][y], -attack_time[x][y], -(x+y), -y, x, y))
 
@@ -18,11 +18,11 @@ def pick_attacker():
     return q[0][-2], q[0][-1]
 
 
-def pick_target():
+def pick_target(attacker_x, attacker_y):
     q = []
     for x in range(1, N + 1):
         for y in range(1, M + 1):
-            if board[x][y] == 0: continue
+            if board[x][y] <= 0 or (x == attacker_x and y == attacker_y): continue
 
             heapq.heappush(q, (-board[x][y], attack_time[x][y], (x + y), y, x, y))
 
@@ -50,7 +50,7 @@ def distance(r1, c1, r2, c2):
 
 
 def laser(attacker_x, attacker_y):
-    target_x, target_y = pick_target()
+    target_x, target_y = pick_target(attacker_x, attacker_y)
 
     q = deque([])
     visited = [[False for _ in range(M+1)] for _ in range(N+1)]
@@ -68,7 +68,7 @@ def laser(attacker_x, attacker_y):
 
             if visited[nx][ny]:
                 continue
-            if board[nx][ny] == 0:
+            if board[nx][ny] <= 0:
                 continue
 
             if nx == target_x and ny == target_y:   # 도달
@@ -88,17 +88,18 @@ def laser(attacker_x, attacker_y):
 
 
 def bomb(attacker_x, attacker_y):
-    target_x, target_y = pick_target()
+    target_x, target_y = pick_target(attacker_x, attacker_y)
     relate_attack[attacker_x][attacker_y] = True
     attack_time[attacker_x][attacker_y] = t
+    board[target_x][target_y] -= board[attacker_x][attacker_y]
 
     for i in range(8):
         nx = target_x + dx[i] if target_x + dx[i] <= N else (target_x + dx[i]) % N
         ny = target_y + dy[i] if target_y + dy[i] <= N else (target_y + dy[i]) % N
 
-        if board[nx][ny] == 0: continue
+        if board[nx][ny] <= 0: continue
 
-        board[nx][ny] -= board[attacker_x][attacker_y]
+        board[nx][ny] -= board[attacker_x][attacker_y] // 2
         relate_attack[nx][ny] = True
 
 
