@@ -26,13 +26,13 @@ def pick_target(attacker_x, attacker_y):
 
             heapq.heappush(q, (-board[x][y], attack_time[x][y], (x + y), y, x, y))
 
-    if not q: return float('inf'), float('inf')
+    # if not q: return float('inf'), float('inf')
     return q[0][-2], q[0][-1]
 
 
 def laser(attacker_x, attacker_y):
     target_x, target_y = pick_target(attacker_x, attacker_y)
-    if target_x == float('inf') and target_y == float('inf'): return False
+    # if target_x == float('inf') and target_y == float('inf'): return False
 
     q = deque([])
     visited = [[False for _ in range(M)] for _ in range(N)]
@@ -86,7 +86,7 @@ def bomb(attacker_x, attacker_y):
         board[nx][ny] -= board[attacker_x][attacker_y] // 2
         relate_attack[nx][ny] = True
 
-    return True
+    # return True
 
 def broken_turret():
     for x in range(N):
@@ -119,8 +119,8 @@ if __name__ == "__main__":
 
         can_laser = laser(r, c)
         if not can_laser:
-            flag = bomb(r, c)
-            if not flag: break
+            bomb(r, c)
+            # if not flag: break
 
         broken_turret()
 
