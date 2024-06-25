@@ -57,6 +57,8 @@ def laser(attacker_x, attacker_y):
 
     q.append((attacker_x, attacker_y, []))
     visited[attacker_x][attacker_y] = True
+    relate_attack[attacker_x][attacker_y] = True
+    attack_time[attacker_x][attacker_y] = t
     while q:
         x, y, route = q.popleft()
 
@@ -70,9 +72,8 @@ def laser(attacker_x, attacker_y):
                 continue
 
             if nx == target_x and ny == target_y:   # 도달
-                relate_attack[attacker_x][attacker_y] = True
-                board[nx][ny] -= board[attacker_x][attacker_y]
                 relate_attack[nx][ny] = True
+                board[nx][ny] -= board[attacker_x][attacker_y]
                 for rx, ry in route:
                     board[rx][ry] -= board[attacker_x][attacker_y] // 2
                     relate_attack[rx][ry] = True
@@ -89,6 +90,7 @@ def laser(attacker_x, attacker_y):
 def bomb(attacker_x, attacker_y):
     target_x, target_y = pick_target()
     relate_attack[attacker_x][attacker_y] = True
+    attack_time[attacker_x][attacker_y] = t
 
     for i in range(8):
         nx = target_x + dx[i] if target_x + dx[i] <= N else (target_x + dx[i]) % N
@@ -122,10 +124,12 @@ if __name__ == "__main__":
         board.append([0]+tmp)
 
     attack_time = [[0 for _ in range(M+1)] for _ in range(N+1)]
-    for _ in range(K):
+    for t in range(K):
         relate_attack = [[False for _ in range(M+1)] for _ in range(N+1)]
 
         r, c = pick_attacker()
+        relate_attack[r][c] = True
+        attack_time[r][c] = t
 
         can_laser = laser(r, c)
         if not can_laser:
