@@ -10,8 +10,8 @@ def in_range(x, y):
 def get_coordinates(x, y):
     ret = []
 
-    for l_13 in range(1, 4):
-        for l_24 in range(1, 4):
+    for l_13 in range(1, n-1):
+        for l_24 in range(1, n-1):
             bx, by = x, y
             rx, ry = bx + dx[0] * l_13, by + dy[0] * l_13
             tx, ty = rx + dx[1] * l_24, ry + dy[1] * l_24
