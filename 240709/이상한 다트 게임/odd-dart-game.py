@@ -65,6 +65,8 @@ def normalization():
     avg = tot // cnt
     for r in range(1, n+1):
         for j in range(m):
+            if board[r][j] == -1: continue
+            
             if board[r][j] > avg:
                 board[r][j] -= 1
             elif board[r][j] < avg:
