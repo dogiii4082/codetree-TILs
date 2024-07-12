@@ -84,16 +84,16 @@ def is_full_red(c):
 
 
 def delete_yellow():
-    tmp = copy.deepcopy(yellow)
     for i in range(6):
+        tmp = copy.deepcopy(yellow)
         while is_full_yellow(i):
             for j in range(1, i+1):
                 yellow[j] = tmp[j-1]
 
 
 def delete_red():
-    tmp = copy.deepcopy(red)
     for i in range(6):
+        tmp = copy.deepcopy(red)
         while is_full_red(i):
             for j in range(1, i + 1):
                 red[j] = tmp[j - 1]
