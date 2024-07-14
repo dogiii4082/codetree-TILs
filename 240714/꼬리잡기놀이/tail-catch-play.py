@@ -4,26 +4,6 @@ dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
 
-# def get_team(x, y, arr):     # 0, 2
-#     if board[x][y] == 3:
-#         arr.append([x, y])
-#         return arr
-#
-#     for i in range(4):
-#         nx = x + dx[i]
-#         ny = y + dy[i]
-#
-#         if nx < 0 or nx >= n or ny < 0 or ny >= n: continue
-#
-#         if board[nx][ny] == 2 or board[nx][ny] == 3:
-#             if [nx, ny] not in arr and board[nx][ny] == 2:
-#                 arr.append([nx, ny])
-#                 arr = get_team(nx, ny, arr)
-#             elif [nx, ny] not in arr and board[nx][ny] == 3:
-#                 arr = get_team(nx, ny, arr)
-#
-#     return arr
-
 def get_team(x, y, arr):
     visited = [[False] * n for _ in range(n)]
 
