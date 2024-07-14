@@ -4,30 +4,63 @@ dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
 
-def get_team(x, y, arr):     # 0, 2
-    if board[x][y] == 3:
-        return arr
+# def get_team(x, y, arr):     # 0, 2
+#     if board[x][y] == 3:
+#         arr.append([x, y])
+#         return arr
+#
+#     for i in range(4):
+#         nx = x + dx[i]
+#         ny = y + dy[i]
+#
+#         if nx < 0 or nx >= n or ny < 0 or ny >= n: continue
+#
+#         if board[nx][ny] == 2 or board[nx][ny] == 3:
+#             if [nx, ny] not in arr and board[nx][ny] == 2:
+#                 arr.append([nx, ny])
+#                 arr = get_team(nx, ny, arr)
+#             elif [nx, ny] not in arr and board[nx][ny] == 3:
+#                 arr = get_team(nx, ny, arr)
+#
+#     return arr
 
-    for i in range(4):
-        nx = x + dx[i]
-        ny = y + dy[i]
+def get_team(x, y, arr):
+    visited = [[False] * n for _ in range(n)]
 
-        if nx < 0 or nx >= n or ny < 0 or ny >= n: continue
+    stack = deque(arr)
+    visited[x][y] = True
 
-        if board[nx][ny] == 2 or board[nx][ny] == 3:
-            if [nx, ny] not in arr:
+    tx, ty = None, None
+    while stack:
+        x, y = stack.pop()
+
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+
+            if nx < 0 or nx >= n or ny < 0 or ny >= n: continue
+            if visited[nx][ny]: continue
+
+            if board[nx][ny] == 3:
+                tx, ty = nx, ny
+
+            if board[nx][ny] == 2:
+                stack.append([nx, ny])
+                visited[nx][ny] = True
                 arr.append([nx, ny])
-                arr = get_team(nx, ny, arr)
 
+    arr.append([tx, ty])
     return arr
 
 
 def move(t):
     team = deque(teams[t])     # [ [0, 2], [0, 1], [0, 0] ]
-    x, y = team.pop()
+    x, y = team.pop()          # [ [0, 2], [0, 1] ]
     board[x][y] = 4
-    hx, hy = team[0][0], team[0][1]
+    board[team[-1][0]][team[-1][1]] = 3
 
+    hx, hy = team[0][0], team[0][1]
+    board[hx][hy] = 2
     for i in range(4):
         nx = hx + dx[i]
         ny = hy + dy[i]
@@ -35,6 +68,7 @@ def move(t):
         if nx < 0 or nx >= n or ny < 0 or ny >= n: continue
 
         if board[nx][ny] == 4:
+            board[nx][ny] = 1
             team.appendleft([nx, ny])
             break
 
@@ -86,7 +120,7 @@ if __name__ == "__main__":
     for i in range(len(head)):
         tmp = get_team(head[i][0], head[i][1], [head[i]])
         teams.append(tmp)
-
+    print(teams)
 
     ans = 0
     for r in range(k):
