@@ -106,19 +106,6 @@ if __name__ == "__main__":
         for t in range(len(teams)):
             teams[t] = move(t)
 
-        for x in range(n):
-            for y in range(n):
-                if board[x][y] != 0: board[x][y] = 4
-
-        for t in range(len(teams)):
-            for idx, (x, y) in enumerate(teams[t]):
-                if idx == 0:
-                    board[x][y] = 1
-                elif idx == len(teams[t]) - 1:
-                    board[x][y] = 3
-                else:
-                    board[x][y] = 2
-
         x, y = ball(r)
         if x != -1 and y != -1:
             for idx, team in enumerate(teams):
