@@ -66,7 +66,7 @@ def ball(r):
     else:
         for i in range(n):
             if board[i][4*n-r-1] in [1, 2, 3]:
-                x, y = i, 4*n-r+1
+                x, y = i, 4*n-r-1
                 break
 
     return [x, y]
