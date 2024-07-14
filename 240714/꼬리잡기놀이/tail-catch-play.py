@@ -24,7 +24,8 @@ def get_team(x, y, arr):     # 0, 2
 
 def move(t):
     team = deque(teams[t])     # [ [0, 2], [0, 1], [0, 0] ]
-    team.pop()
+    x, y = team.pop()
+    board[x][y] = 4
     hx, hy = team[0][0], team[0][1]
 
     for i in range(4):
@@ -41,7 +42,7 @@ def move(t):
 
 
 def ball(r):
-    r = r % (4*n-1)
+    r %= 4*n
 
     x, y = -1, -1
 
