@@ -120,7 +120,6 @@ if __name__ == "__main__":
     for i in range(len(head)):
         tmp = get_team(head[i][0], head[i][1], [head[i]])
         teams.append(tmp)
-    print(teams)
 
     ans = 0
     for r in range(k):
