@@ -89,7 +89,7 @@ def kill(m, c):
                 kx = x
                 ky = y
 
-    ans += cnt
+    if cnt > 0: ans += cnt
 
     board[kx][ky] = - (m + c)
     for i in range(4, 8):
@@ -98,7 +98,7 @@ def kill(m, c):
             ny = ky + dy[i]*k
 
             if not in_range(nx, ny): continue
-            if board[nx][ny] < 0: break
+            if board[nx][ny] <= 0: break
 
             board[nx][ny] = - (m + c)
 
@@ -106,9 +106,14 @@ def kill(m, c):
 def end_kill(m):    # m년 까지 제초제 존재
     for x in range(n):
         for y in range(n):
-            if board[x][y] < 0 and -board[x][y] > m:
+            if board[x][y] < 0 and -board[x][y] < m and board[x][y] != -1:
                 board[x][y] = 0
 
+
+def print_board():
+    for row in board:
+        print(*row)
+    print()
 
 if __name__ == "__main__":
     n, M, K, c = map(int, input().split())
@@ -116,12 +121,26 @@ if __name__ == "__main__":
 
     ans = 0
     for m in range(1, M+1):
+        # print(f'--------{m}년-----------')
+        # print()
+
         end_kill(m)
+        # print("-------제초제 제거------")
+        # print_board()
 
         grow()
+        # print("-------grow------")
+        # print_board()
 
         board = spread()
+        # print("-------spread------")
+        # print_board()
 
         kill(m, c)
+        # print("-------kill------")
+        # print_board()
+
+
+        # print(f'ans: {ans}')
 
     print(ans)
