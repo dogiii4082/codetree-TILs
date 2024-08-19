@@ -67,7 +67,6 @@ def count_kill(x, y):
             ny = y + dy[i] * k
 
             if not in_range(nx, ny): continue
-            # if board[nx][ny] == -1 or board[nx][ny] == 0: break
             if board[nx][ny] <= 0: break
 
             ret += board[nx][ny]
@@ -85,7 +84,6 @@ def kill(m, c):
         for y in range(n):
             if not is_tree(x, y): continue
 
-            # print(count_kill(x, y), x, y)
             tmp[x][y] = count_kill(x, y)
 
             if tmp[x][y] > cnt:
@@ -95,7 +93,6 @@ def kill(m, c):
 
     if cnt > 0: ans += cnt
 
-    # print(kx, ky)
     board[kx][ky] = - (m + c)
     for i in range(4, 8):
         for k in range(1, K+1):
@@ -118,11 +115,6 @@ def end_kill(m):    # m년 까지 제초제 존재
                 else: board[x][y] = 0
 
 
-def print_board():
-    for row in board:
-        print(*row)
-    print()
-
 if __name__ == "__main__":
     n, M, K, c = map(int, input().split())
     board = [list(map(int, input().split())) for _ in range(n)]
@@ -134,27 +126,13 @@ if __name__ == "__main__":
                 is_wall[x][y] = 1
 
     ans = 0
-
     for m in range(1, M+1):
-        # print(f'--------{m}년-----------')
-        # print()
-
         grow()
-        # print("-------grow------")
-        # print_board()
 
         board = spread()
-        # print("-------spread------")
-        # print_board()
 
         kill(m, c)
-        # print("-------제초제 뿌리기------")
-        # print_board()
 
         end_kill(m)
-        # print("-------제초제 제거------")
-        # print_board()
-
-        # print(f'ans: {ans}')
 
     print(ans)
