@@ -41,7 +41,7 @@ def count_adj_empty(x, y):
 
 
 def spread():
-    tmp = copy.deepcopy(board)
+    tmp = [[board[i][j] for j in range(n)] for i in range(n)]
 
     for x in range(n):
         for y in range(n):
