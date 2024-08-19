@@ -1,5 +1,3 @@
-import copy
-
 dx = [-1, 1, 0, 0, -1, -1, 1, 1]
 dy = [0, 0, -1, 1, 1, -1, 1, -1]
 
@@ -77,7 +75,7 @@ def count_kill(x, y):
 def kill(m, c):
     global ans
 
-    tmp = copy.deepcopy(board)
+    tmp = [[board[i][j] for j in range(n)] for i in range(n)]
 
     cnt, kx, ky = -1, -1, -1
     for x in range(n):
