@@ -121,7 +121,7 @@ def dead_clear(t):
         for y in range(1, 5):
             if not is_dead[x][y]: continue
 
-            if is_dead[x][y] + 2 <= t:
+            if is_dead[x][y] + 2 < t:
                 is_dead[x][y] = 0
 
 
