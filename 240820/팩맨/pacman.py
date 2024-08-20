@@ -39,7 +39,9 @@ def move():
             if not is_monster(x, y): continue
 
             monsters = board[x][y]
+            can_move = False
             for d in monsters:
+
                 for i in range(9):
                     nx = x + dx[(d + i - 1) % 8 + 1]
                     ny = y + dy[(d + i - 1) % 8 + 1]
@@ -47,7 +49,11 @@ def move():
 
                     if in_range(nx, ny) and not is_pacman(nx, ny) and not is_dead[nx][ny]:
                         tmp[nx][ny].append((d + i - 1) % 8 + 1)
+                        can_move = True
                         break
+
+            if not can_move:
+                tmp[x][y].extend(board[x][y])
 
     return tmp
 
@@ -103,7 +109,7 @@ def pacman_move(t):
         py += pdy[d]
 
         if is_monster(px, py):
-            is_dead[px][py] = t
+            is_dead[px][py].append(t)
             board[px][py].clear()
 
 
@@ -121,8 +127,12 @@ def dead_clear(t):
         for y in range(1, 5):
             if not is_dead[x][y]: continue
 
-            if is_dead[x][y] + 2 < t:
-                is_dead[x][y] = 0
+            deads = is_dead[x][y]
+            tmp = []
+            for dead in deads:
+                if dead + 2 > t:
+                    tmp.append(dead)
+            is_dead[x][y] = tmp
 
 
 if __name__ == "__main__":
@@ -133,7 +143,7 @@ if __name__ == "__main__":
         r, c, d = map(int, input().split())
         board[r][c].append(d)
     sub_board = [[[] for _ in range(5)] for _ in range(5)]
-    is_dead = [[0 for _ in range(5)] for _ in range(5)]
+    is_dead = [[[] for _ in range(5)] for _ in range(5)]
 
     pacman_dir = []
     for i in range(4):
@@ -141,36 +151,43 @@ if __name__ == "__main__":
 
     for t in range(1, T + 1):
         # print(f'-----------------{t}턴---------------')
+        # print("init")
         # print()
         # for row in board:
         #     print(*row)
         # print()
         try_duplicate()
+        # print("복제 후")
         # print()
         # for row in board:
         #     print(*row)
         # print()
         # print(f'팩맨: {px}, {py}')
         board = move()
+        # print("이동 후")
         # print()
         # for row in board:
         #     print(*row)
         # print()
         pacman_move(t)
+        # print("팩맨 이동 후")
         # print()
         # for row in board:
         #     print(*row)
         # print()
         dead_clear(t)
+        # print("시체 없애기")
         # print()
         # for row in board:
         #     print(*row)
         # print()
         done_duplicate()
         # print()
+        # print("보드")
         # for row in board:
         #     print(*row)
         # print()
+        # print("서브")
         # for row in sub_board:
         #     print(*row)
 
