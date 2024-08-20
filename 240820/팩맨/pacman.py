@@ -45,7 +45,6 @@ def move():
                 for i in range(9):
                     nx = x + dx[(d + i - 1) % 8 + 1]
                     ny = y + dy[(d + i - 1) % 8 + 1]
-                    # ny = y + dy[(d + i - 1) % 8 if d + i != 8 else 1]
 
                     if in_range(nx, ny) and not is_pacman(nx, ny) and not is_dead[nx][ny]:
                         tmp[nx][ny].append((d + i - 1) % 8 + 1)
@@ -96,14 +95,11 @@ def pacman_move(t):
 
         if not out_of_range:
             cnt[i] = c
-    # print(cnt)
     M_dir = None
     for i in range(64):
         if cnt[i] == max(cnt):
             M_dir = pacman_dir[i]
             break
-    # print(pacman_dir)
-    # print(M_dir)
     for d in M_dir: # [0, 3, 3]
         px += pdx[d]
         py += pdy[d]
@@ -150,46 +146,11 @@ if __name__ == "__main__":
         pacman_can_move(i, [], 0)
 
     for t in range(1, T + 1):
-        # print(f'-----------------{t}턴---------------')
-        # print("init")
-        # print()
-        # for row in board:
-        #     print(*row)
-        # print()
         try_duplicate()
-        # print("복제 후")
-        # print()
-        # for row in board:
-        #     print(*row)
-        # print()
-        # print(f'팩맨: {px}, {py}')
         board = move()
-        # print("이동 후")
-        # print()
-        # for row in board:
-        #     print(*row)
-        # print()
         pacman_move(t)
-        # print("팩맨 이동 후")
-        # print()
-        # for row in board:
-        #     print(*row)
-        # print()
         dead_clear(t)
-        # print("시체 없애기")
-        # print()
-        # for row in board:
-        #     print(*row)
-        # print()
         done_duplicate()
-        # print()
-        # print("보드")
-        # for row in board:
-        #     print(*row)
-        # print()
-        # print("서브")
-        # for row in sub_board:
-        #     print(*row)
 
     ans = 0
     for x in range(1, 5):
