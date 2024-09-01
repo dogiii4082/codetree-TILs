@@ -106,6 +106,10 @@ int GetBeltInfo(int b_num) {
 }
 
 int main() {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
 	cin >> q;
 
 	while (q--) {
