@@ -3,7 +3,7 @@
 # 🥇 실전 훈련
 |총 문제 수|티어|유형|
 |---:|---|---|
-|1|![Platinum5][p5] ~ ![Platinum5][p5]|`Simulation` `Doubly-LinkedList`|
+|1|![Platinum5][p5] ~ ![Platinum5][p5]|`Doubly-LinkedList` `Simulation`|
 
 |기록분류|이름|티어|유형|상태|최근 제출 코드|
 |---|---|---|---|---|---|
