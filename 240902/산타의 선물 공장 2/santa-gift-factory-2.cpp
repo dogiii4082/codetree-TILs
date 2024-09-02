@@ -67,11 +67,11 @@ void MakeFactory(int b, int p) {
 }
 
 void MoveAll(int src, int dst) {
-
 	belt[dst].cnt += belt[src].cnt;
 	present[belt[src].back].next = belt[dst].front;
 	present[belt[dst].front].prev = belt[src].back;
 	belt[dst].front = belt[src].front;
+	belt[dst].back = belt[src].back;
 	belt[src] = BELT{ -1, 0, -1 };
 }
 
