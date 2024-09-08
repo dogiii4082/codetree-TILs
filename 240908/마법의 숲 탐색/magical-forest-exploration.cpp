@@ -129,7 +129,7 @@ int Move(int r, int c, int n) {
 		else if (CanGoLeft(r, c)) {
 			r++;
 			c--;
-			dir[n] = (dir[n] - 1) % 4;
+			dir[n] = (dir[n] + 3) % 4;
 		}
 		else if (CanGoRight(r, c)) {
 			r++;
