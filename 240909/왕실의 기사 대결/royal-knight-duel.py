@@ -315,6 +315,6 @@ if __name__ == "__main__":
         i, d = map(int, input().split())
         move(i, d)
     for i in range(1, N+1):
-        if K[i] == 0: continue
+        if K[i] <= 0: continue
         ans += init_HP[i] - K[i]
     print(ans)
