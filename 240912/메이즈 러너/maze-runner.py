@@ -149,7 +149,7 @@ def in_range(x, y):
 
 def move():
     global ans
-    # print(is_end[1:M+1])
+
     for pid in range(1, M+1):
 
         if is_end[pid]: continue
@@ -179,8 +179,8 @@ def move():
 
 def is_p_and_exit(r, x, y):
     for pid in range(1, M+1):
-        # if is_end[pid]: continue
-        if not is_end[pid] and x <= PX[pid] <= x + r - 1 and y <= PY[pid] <= y + r - 1 and x <= ex <= x + r - 1 and y <= ey <= y + r - 1:
+        if is_end[pid]: continue
+        if x <= PX[pid] <= x + r - 1 and y <= PY[pid] <= y + r - 1 and x <= ex <= x + r - 1 and y <= ey <= y + r - 1:
             return True
     return False
 
@@ -188,13 +188,6 @@ def is_p_and_exit(r, x, y):
 def rotate_people_exit(d, x, y):
     global ex, ey
 
-    # cx = (2*x + d - 1) // 2
-    # cy = (2*y + d - 1) // 2
-    #
-    # dx = ex - cx
-    # dy = ey - cy
-    #
-    # ex, ey = cx + dy, cx - dx
     ox, oy = ex - x, ey - y
     rx, ry = oy, d - ox - 1
     ex = rx + x
@@ -217,8 +210,6 @@ def rotate():
             for y in range(1, N+1):
                 if not is_p_and_exit(d, x, y): continue
 
-                # 3, 1, 1
-                # print(d, x, y)
                 for r in range(x, x + d):
                     for c in range(y, y + d):
                         ox, oy = r - x, c - y
@@ -232,6 +223,7 @@ def rotate():
                 rotate_people_exit(d, x, y)
 
                 return ret
+
     return ret
 
 
@@ -248,24 +240,9 @@ if __name__ == "__main__":
     ex, ey = map(int, input().split())
 
     ans = 0
-
     for k in range(1, K+1):
-        # print(f'======{k}초======')
         move()
-        # print("======이동======")
-        # print(PX[1:M+1])
-        # print(PY[1:M+1])
         if all(is_end[1:M+1]): break
-
         grid = rotate()
-        # print("======회전======")
-        # for row in range(1, N+1):
-        #     print(*grid[row][1:N+1])
-        #
-        # for row in range(1, N+1):
-        #     print(*grid[row][1:N+1])
-        # print(PX[1:M+1])
-        # print(PY[1:M+1])
-        # print(ex, ey)
     print(ans)
     print(ex, ey)
