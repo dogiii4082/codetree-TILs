@@ -138,43 +138,42 @@
 #             ans = max(ans, board[x][y])
 #     print(ans)
 
-
 from collections import deque
 
 dx = [0, 1, 0, -1, -1, -1, 1, 1]
 dy = [1, 0, -1, 0, 1, -1, 1, -1]
 
 
-def get_attacker():
-    t = 0
-    tx, ty = 0, 0
-    min_power = 1e9
+def get_target():
+    M_atk = 0
     for x in range(N):
         for y in range(M):
-            if min_power < grid[x][y]: continue
-            if grid[x][y] == 0: continue
+            if (x, y) == (ax, ay): continue
+            M_atk = max(M_atk, grid[x][y])
 
-            if t <= final_attack_time[x][y]:
-                tx, ty = x, y
-                min_power = grid[x][y]
-                t = final_attack_time[x][y]
-    return tx, ty
-
-
-def get_target():
-    t = 0
-    tx, ty = 0, 0
-    max_power = -1
+    tmp = []
     for x in range(N):
-        for y in range(N):
-            if max_power > grid[x][y]: continue
-            if grid[x][y] == 0: continue
+        for y in range(M):
+            if grid[x][y] == M_atk: tmp.append((x, y))
 
-            if t <= final_attack_time[x][y]:
-                tx, ty = x, y
-                max_power = grid[x][y]
-                t = final_attack_time[x][y]
-    return tx, ty
+    tmp.sort(key=lambda x: (final_attack_time[x[0]][x[1]], (x[0] + x[1]), x[1]))
+    return tmp[0][0], tmp[0][1]
+
+
+def get_attacker():
+    m_atk = 1e9
+    for x in range(N):
+        for y in range(M):
+            if grid[x][y] == 0: continue
+            m_atk = min(m_atk, grid[x][y])
+
+    tmp = []
+    for x in range(N):
+        for y in range(M):
+            if grid[x][y] == m_atk: tmp.append((x, y))
+
+    tmp.sort(key=lambda x: (-final_attack_time[x[0]][x[1]], -(x[0] + x[1]), -x[1]))
+    return tmp[0][0], tmp[0][1]
 
 
 def try_laser():
@@ -205,6 +204,8 @@ def can_laser():
 
 
 def laser():
+    final_attack_time[ax][ay] = t
+
     x, y = tx, ty
     path = [(x, y)]
     is_related[x][y] = True
@@ -213,19 +214,20 @@ def laser():
         path.append(prev[x][y])
         x, y = prev[x][y]
         is_related[x][y] = True
-
     for x, y in path:
         if (x, y) == (ax, ay): continue
         if (x, y) == (tx, ty):
-            grid[x][y] -= max(grid[ax][ay], 0)
+            grid[x][y] -= grid[ax][ay]
         else:
-            grid[x][y] -= max((grid[ax][ay]) // 2, 0)
-
+            grid[x][y] -= (grid[ax][ay]) // 2
 
 
 def bomb():
-    grid[tx][ty] -= max(grid[ax][ay], 0)
+    final_attack_time[ax][ay] = t
+
+    grid[tx][ty] -= grid[ax][ay]
     is_related[tx][ty] = True
+    is_related[ax][ay] = True
 
     for i in range(8):
         nx = (tx + dx[i] + N) % N
@@ -233,7 +235,7 @@ def bomb():
 
         if grid[nx][ny] == 0: continue
 
-        grid[nx][ny] -= max(grid[ax][ay], 0)
+        grid[nx][ny] -= (grid[ax][ay]) // 2
         is_related[nx][ny] = True
 
 
@@ -250,11 +252,14 @@ if __name__ == "__main__":
     N, M, K = map(int, input().split())
     grid = [list(map(int, input().split())) for _ in range(N)]
     final_attack_time = [[0 for _ in range(M)] for _ in range(N)]
-    for _ in range(K):
+    for t in range(1, K+1):
+        # print(f"====={t}턴=====")
         ax, ay = get_attacker()
+        # print(f'ax, ay: {ax}, {ay}')
         grid[ax][ay] += N + M
 
         tx, ty = get_target()
+        # print(f'tx, ty: {tx}, {ty}')
 
         prev = [[(None, None) for _ in range(M)] for _ in range(N)]
         try_laser()
@@ -264,8 +269,19 @@ if __name__ == "__main__":
             laser()
         else:
             bomb()
+        # print("공격")
+        # for row in grid:
+        #     print(*row)
+
+        for x in range(N):
+            for y in range(M):
+                grid[x][y] = max(0, grid[x][y])
+
 
         repair()
+        # print("정비")
+        # for row in grid:
+        #     print(*row)
 
     ans = 0
     for row in grid:
