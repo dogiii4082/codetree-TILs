@@ -50,8 +50,8 @@ def try_laser():
         x, y = q.popleft()
 
         for i in range(4):
-            nx = (x + dx[i] + N) % N
-            ny = (y + dy[i] + M) % M
+            nx = (x + dx[i]) % N
+            ny = (y + dy[i]) % M
 
             if visited[nx][ny]: continue
             if grid[nx][ny] == 0: continue
@@ -92,8 +92,8 @@ def bomb():
     is_related[ax][ay] = True
 
     for i in range(8):
-        nx = (tx + dx[i] + N) % N
-        ny = (ty + dy[i] + M) % M
+        nx = (tx + dx[i]) % N
+        ny = (ty + dy[i]) % M
 
         if grid[nx][ny] == 0: continue
         if (nx, ny) == (ax, ay): continue
