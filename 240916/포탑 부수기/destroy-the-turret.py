@@ -137,7 +137,6 @@
 #         for y in range(M):
 #             ans = max(ans, board[x][y])
 #     print(ans)
-
 from collections import deque
 
 dx = [0, 1, 0, -1, -1, -1, 1, 1]
@@ -145,9 +144,10 @@ dy = [1, 0, -1, 0, 1, -1, 1, -1]
 
 
 def get_target():
-    M_atk = 0
+    M_atk = -1
     for x in range(N):
         for y in range(M):
+            if grid[x][y] == 0: continue
             if (x, y) == (ax, ay): continue
             M_atk = max(M_atk, grid[x][y])
 
@@ -234,6 +234,7 @@ def bomb():
         ny = (ty + dy[i] + M) % M
 
         if grid[nx][ny] == 0: continue
+        if (nx, ny) == (ax, ay): continue
 
         grid[nx][ny] -= (grid[ax][ay]) // 2
         is_related[nx][ny] = True
@@ -248,11 +249,20 @@ def repair():
             grid[x][y] += 1
 
 
+def only_one():
+    cnt = 0
+    for x in range(N):
+        for y in range(M):
+           if grid[x][y] != 0: cnt += 1
+    return cnt == 1
+
 if __name__ == "__main__":
     N, M, K = map(int, input().split())
     grid = [list(map(int, input().split())) for _ in range(N)]
     final_attack_time = [[0 for _ in range(M)] for _ in range(N)]
     for t in range(1, K+1):
+        if only_one():
+            break
         # print(f"====={t}턴=====")
         ax, ay = get_attacker()
         # print(f'ax, ay: {ax}, {ay}')
