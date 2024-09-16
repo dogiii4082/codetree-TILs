@@ -4,7 +4,6 @@ dx = [0, 1, 0, -1, -1, -1, 1, 1]
 dy = [1, 0, -1, 0, 1, -1, 1, -1]
 
 
-# 가장 오래 전에 공격: t가 작아야 함
 def get_target():
     M_atk = -1
     for x in range(N):
@@ -17,13 +16,12 @@ def get_target():
     for x in range(N):
         for y in range(M):
             if (x, y) == (ax, ay): continue
-            if grid[x][y] == M_atk: tmp.append((final_attack_time[x][y], x, y))
+            if grid[x][y] == M_atk: tmp.append((x, y))
 
-    tmp.sort(key=lambda x: (x[0], (x[1] + x[2]), x[2]))
-    return tmp[0][1], tmp[0][2]
+    tmp.sort(key=lambda x: (final_attack_time[x[0]][x[1]], (x[0] + x[1]), x[1]))
+    return tmp[0][0], tmp[0][1]
 
 
-# 가장 최근에 공격: t가 커야함
 def get_attacker():
     m_atk = 1e9
     for x in range(N):
@@ -34,10 +32,10 @@ def get_attacker():
     tmp = []
     for x in range(N):
         for y in range(M):
-            if grid[x][y] == m_atk: tmp.append((final_attack_time[x][y], x, y))
+            if grid[x][y] == m_atk: tmp.append((x, y))
 
-    tmp.sort(key=lambda x: (-x[0], -(x[1] + x[2]), -x[2]))
-    return tmp[0][1], tmp[0][2]
+    tmp.sort(key=lambda x: (-final_attack_time[x[0]][x[1]], -(x[0] + x[1]), -x[1]))
+    return tmp[0][0], tmp[0][1]
 
 
 def try_laser():
