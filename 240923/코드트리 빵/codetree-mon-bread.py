@@ -239,7 +239,7 @@ if __name__ == "__main__":
 
     t = 0
     while True:
-        if all_arive() or t == 10:
+        if all_arive():
             break
         t += 1
 
