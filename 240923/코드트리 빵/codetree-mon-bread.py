@@ -112,7 +112,6 @@
 #             board[x][y] = -int(1e9)
 #     print(t)
 
-
 from collections import deque
 
 dx = [-1, 0, 0, 1]
@@ -183,9 +182,12 @@ def bfs(sx, sy, pid):
 
             if not in_range(nx, ny): continue
             if dist[nx][ny] != int(1e9): continue
+            if is_end[nx][ny]: continue
 
             q.append((nx, ny))
             dist[nx][ny] = dist[x][y] + 1
+
+    return dist[SX[pid]][SY[pid]]
 
 
 def go_to_store(pid):
@@ -237,7 +239,7 @@ if __name__ == "__main__":
 
     t = 0
     while True:
-        if all_arive():
+        if all_arive() or t == 10:
             break
         t += 1
 
