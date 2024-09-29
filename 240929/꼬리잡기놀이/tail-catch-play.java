@@ -41,9 +41,9 @@ public class Main {
 //                System.out.println();
 //            }
 //
-//            for (int i = 0; i < m; i++) {
-//                System.out.println(teams[i]);
-//            }
+        //    for (int i = 0; i < m; i++) {
+        //        System.out.println(teams[i]);
+        //    }
 //            System.out.println(ans);
             move();
 //            for (int i = 0; i < n; i++) {
@@ -73,7 +73,7 @@ public class Main {
                 }
             }
             ans += (idx + 1) * (idx + 1);
-            reverse(tIdx);
+            if (tIdx != -1) reverse(tIdx);
 
 
         }
@@ -183,6 +183,7 @@ public class Main {
             if (!inRange(nx, ny)) continue;
             if (visited[nx][ny]) continue;
             if (grid[nx][ny] == 0 || grid[nx][ny] == 4) continue;
+            if (team.size() == 1 && grid[nx][ny] == 3) continue;
 
             getTeam(new Pair(nx, ny), visited, team, t);
         }
