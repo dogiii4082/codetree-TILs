@@ -33,18 +33,30 @@ public class Main {
 
 
         for (int r = 0; r < k; r++) {
+//            System.out.println(r);
+//            for (int i = 0; i < n; i++) {
+//                for (int j = 0; j < n; j++) {
+//                    System.out.print(grid[i][j] + " ");
+//                }
+//                System.out.println();
+//            }
+//
+//            for (int i = 0; i < m; i++) {
+//                System.out.println(teams[i]);
+//            }
+//            System.out.println(ans);
             move();
+//            for (int i = 0; i < n; i++) {
+//                for (int j = 0; j < n; j++) {
+//                    System.out.print(grid[i][j] + " ");
+//                }
+//                System.out.println();
+//            }
 
             Pair hit = throwBall(r);
+//            System.out.println(hit);
+//            System.out.println();
 
-            // for (int i = 0; i < n; i++) {
-            //     for (int j = 0; j < n; j++) {
-            //         System.out.print(grid[i][j] + " ");
-            //     }
-            //     System.out.println();
-            // }
-
-            // System.out.println(hit);
             if (hit.x == -1 && hit.y == -1) continue;
 
             int idx = 0;
@@ -60,11 +72,11 @@ public class Main {
                     }
                 }
             }
-            
             ans += (idx + 1) * (idx + 1);
             if (tIdx != -1) reverse(tIdx);
-        }
 
+
+        }
         System.out.println(ans);
     }
 
@@ -72,6 +84,12 @@ public class Main {
         ArrayList<Pair> team = teams[idx];
         Collections.reverse(team);
         teams[idx] = team;
+
+        for (int i = 0; i < teams[idx].size(); i++) {
+            if (i == 0) grid[teams[idx].get(i).x][teams[idx].get(i).y] = 1;
+            else if (i == teams[idx].size() - 1) grid[teams[idx].get(i).x][teams[idx].get(i).y] = 3;
+            else grid[teams[idx].get(i).x][teams[idx].get(i).y] = 2;
+        }
     }
 
     private static void move() {
@@ -89,7 +107,7 @@ public class Main {
 
                         if (!inRange(nx, ny)) continue;
 
-                        if (grid[nx][ny] == 4) { 
+                        if (grid[nx][ny] == 4) {
                             nxtTeam.add(new Pair(nx, ny));
                             grid[nx][ny] = 1;
                         }
@@ -103,8 +121,8 @@ public class Main {
         for (int i = 0; i < m; i++) {
             ArrayList<Pair> curTeam = teams[i];
 
-            for (int j = 1; j < curTeam.size() - 1; j++) {
-                if (j == curTeam.size() - 2) {
+            for (int j = 1; j < curTeam.size(); j++) {
+                if (j == curTeam.size() - 1) {
                     grid[curTeam.get(j).x][curTeam.get(j).y] = 3;
                 } else {
                     grid[curTeam.get(j).x][curTeam.get(j).y] = 2;
@@ -124,7 +142,7 @@ public class Main {
             }
         } else if (r / n == 1) {
             for (int i = n-1; i >= 0; i--) {
-                if (1 <= grid[i][r % n] && grid[r][i] <= 3) {
+                if (1 <= grid[i][r % n] && grid[i][r % n] <= 3) {
                     return new Pair(i, r % n);
                 }
             }
