@@ -45,6 +45,8 @@ public class Main {
             // }
 
             // System.out.println(hit);
+            if (hit.x == -1 && hit.y == -1) continue;
+
             int idx = 0;
             int tIdx = -1;
             for (int i = 0; i < m; i++) {
