@@ -7,11 +7,6 @@ class Pair {
         this.x = x;
         this.y = y;
     }
-
-    @Override
-    public String toString() {
-        return "(" + x + "," + y + ")";
-    }
 }
 
 public class Main {
@@ -31,31 +26,10 @@ public class Main {
     public static void main(String[] args) {
         Input();
 
-
         for (int r = 0; r < k; r++) {
-//            System.out.println(r);
-//            for (int i = 0; i < n; i++) {
-//                for (int j = 0; j < n; j++) {
-//                    System.out.print(grid[i][j] + " ");
-//                }
-//                System.out.println();
-//            }
-//
-        //    for (int i = 0; i < m; i++) {
-        //        System.out.println(teams[i]);
-        //    }
-//            System.out.println(ans);
             move();
-//            for (int i = 0; i < n; i++) {
-//                for (int j = 0; j < n; j++) {
-//                    System.out.print(grid[i][j] + " ");
-//                }
-//                System.out.println();
-//            }
 
             Pair hit = throwBall(r);
-//            System.out.println(hit);
-//            System.out.println();
 
             if (hit.x == -1 && hit.y == -1) continue;
 
@@ -73,10 +47,9 @@ public class Main {
                 }
             }
             ans += (idx + 1) * (idx + 1);
-            if (tIdx != -1) reverse(tIdx);
-
-
+            reverse(tIdx);
         }
+
         System.out.println(ans);
     }
 
