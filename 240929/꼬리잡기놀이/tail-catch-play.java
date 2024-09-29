@@ -73,7 +73,7 @@ public class Main {
                 }
             }
             ans += (idx + 1) * (idx + 1);
-            if (tIdx != -1) reverse(tIdx);
+            reverse(tIdx);
 
 
         }
