@@ -108,9 +108,9 @@ void catchHider(int k) {
 
         if (!inRange(x, y)) continue;
         if (treeGrid[x][y] == 1) continue;
-        if (isEnd[grid[x][y]]) continue;
 
         for (int pid = 1; pid <= M; pid++) {
+            if (isEnd[pid]) continue;
             if (hiders[pid].x == x && hiders[pid].y == y) {
                 cnt++;
                 isEnd[pid] = true;
