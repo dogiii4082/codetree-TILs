@@ -4,6 +4,7 @@
 #define MAX_N 100
 #define MAX_M 10000
 #define MAX_H 10000
+#define DEBUG false
 
 using namespace std;
 
@@ -88,12 +89,15 @@ void move(int pid) {
 
 void moveHider() {
     for (int i = 1; i <= M; i++) {
+        if (isEnd[i]) continue;
         if (distance(seeker.x, seeker.y, hiders[i].x, hiders[i].y) <= 3) {
             move(i);
         }
     }
-    // cout << "===Hider===" << endl;
-    // printHider();
+    if (DEBUG) {
+        cout << "===Hider===" << endl;
+        printHider();
+    }
 }
 
 void catchHider(int k) {
@@ -104,10 +108,14 @@ void catchHider(int k) {
 
         if (!inRange(x, y)) continue;
         if (treeGrid[x][y] == 1) continue;
+        if (isEnd[grid[x][y]]) continue;
 
-        if (grid[x][y] != 0 && !isEnd[grid[x][y]]) {
-            cnt++;
-            isEnd[grid[x][y]] = true;
+        for (int pid = 1; pid <= M; pid++) {
+            if (hiders[pid].x == x && hiders[pid].y == y) {
+                cnt++;
+                isEnd[pid] = true;
+                grid[x][y] = 0;
+            }
         }
     }
     ans += k * cnt;
@@ -138,8 +146,10 @@ void moveSeeker(int k) {
         }
 
         seeker = Seeker{nx, ny, nd};
-        // cout << "===Seeker===" << endl;
-        // cout << seeker.x << " " << seeker.y << " " << seeker.d << endl;
+        if (DEBUG) {
+            cout << "===Seeker===" << endl;
+            cout << seeker.x << " " << seeker.y << " " << seeker.d << endl;
+        }
 
         catchHider(k);
 
@@ -163,8 +173,10 @@ void moveSeeker(int k) {
         }
 
         seeker = Seeker{nx, ny, nd};
-        // cout << "===Seeker===" << endl;
-        // cout << seeker.x << " " << seeker.y << " " << seeker.d << endl;
+        if (DEBUG) {
+            cout << "===Seeker===" << endl;
+            cout << seeker.x << " " << seeker.y << " " << seeker.d << endl;
+        }
 
         catchHider(k);
 
@@ -194,8 +206,10 @@ int main() {
     }
 
     for (int k = 1; k <= K; k++) {
-        // cout << endl;
-        // cout << k << "턴=====" << endl;
+        if (DEBUG) {
+            cout << endl;
+            cout << k << "턴=====" << endl;
+        }
         moveHider();
         moveSeeker(k);
     }
