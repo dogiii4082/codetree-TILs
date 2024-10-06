@@ -27,6 +27,7 @@ bool isRed;
 struct Center {
     int x, y;
 } center;
+bool isEnd[MAX_M];
 
 void printGrid() {
     for (int i = 1; i <= N; i++) {
@@ -104,7 +105,10 @@ void catchHider(int k) {
         if (!inRange(x, y)) continue;
         if (treeGrid[x][y] == 1) continue;
 
-        if (grid[x][y] != 0) cnt++;
+        if (grid[x][y] != 0 && !isEnd[grid[x][y]]) {
+            cnt++;
+            isEnd[grid[x][y]] = true;
+        }
     }
     ans += k * cnt;
 }
@@ -190,6 +194,7 @@ int main() {
     }
 
     for (int k = 1; k <= K; k++) {
+        // cout << endl;
         // cout << k << "턴=====" << endl;
         moveHider();
         moveSeeker(k);
