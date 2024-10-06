@@ -62,28 +62,26 @@ void move(int pid) {
     y = hiders[pid].y;
     d = hiders[pid].d;  // 1: (좌, 우), 2: (상, 하)
 
-    for (int i = 2*d-2; i <= 2*d-1; i++) {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
+    int nx = x + dx[d];
+    int ny = y + dy[d];
 
-        if (!inRange(nx, ny)) {     // 격자를 벗어나는 경우
-            int nd = (d + 2) % 4;
+    if (!inRange(nx, ny)) {     // 격자를 벗어나는 경우
+        int nd = (d + 2) % 4;
 
-            hiders[pid].d = nd;
-            int nnx = x + dx[nd];
-            int nny = y + dy[nd];
+        hiders[pid].d = nd;
+        int nnx = x + dx[nd];
+        int nny = y + dy[nd];
 
-            if (!isSeeker(nnx, nny)) {
-                hiders[pid] = Hider{nnx, nny, nd};
-                grid[x][y] = 0;
-                grid[nnx][nny] = pid;
-            }
-        } else {                    // 격자를 벗어나지 않는 경우
-            if (isSeeker(nx, ny)) return;
+        if (!isSeeker(nnx, nny)) {
+            hiders[pid] = Hider{nnx, nny, nd};
             grid[x][y] = 0;
-            hiders[pid] = Hider{nx, ny, d};
-            grid[nx][ny] = pid;
+            grid[nnx][nny] = pid;
         }
+    } else {                    // 격자를 벗어나지 않는 경우
+        if (isSeeker(nx, ny)) return;
+        grid[x][y] = 0;
+        hiders[pid] = Hider{nx, ny, d};
+        grid[nx][ny] = pid;
     }
 }
 
@@ -93,6 +91,7 @@ void moveHider() {
             move(i);
         }
     }
+    // cout << "===Hider===" << endl;
     // printHider();
 }
 
@@ -135,7 +134,7 @@ void moveSeeker(int k) {
         }
 
         seeker = Seeker{nx, ny, nd};
-
+        // cout << "===Seeker===" << endl;
         // cout << seeker.x << " " << seeker.y << " " << seeker.d << endl;
 
         catchHider(k);
@@ -160,7 +159,7 @@ void moveSeeker(int k) {
         }
 
         seeker = Seeker{nx, ny, nd};
-
+        // cout << "===Seeker===" << endl;
         // cout << seeker.x << " " << seeker.y << " " << seeker.d << endl;
 
         catchHider(k);
@@ -178,6 +177,7 @@ int main() {
     for (int i = 1; i <= M; i++) {
         int x, y, d;
         cin >> x >> y >> d;
+        dir[i] = d;
         grid[x][y] = i;
         hiders[i] = Hider{x, y, d};
     }
@@ -190,6 +190,7 @@ int main() {
     }
 
     for (int k = 1; k <= K; k++) {
+        // cout << k << "턴=====" << endl;
         moveHider();
         moveSeeker(k);
     }
