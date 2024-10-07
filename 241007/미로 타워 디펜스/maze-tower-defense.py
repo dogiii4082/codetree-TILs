@@ -6,11 +6,15 @@ def attack(m):
     global ans
 
     d, p = attacks[m]
-    for i in range(1, p+1):
+    for i in range(1, p + 1):
         nx = ax + dx[d] * i
         ny = ay + dy[d] * i
 
-        if grid[nx][ny] == 0: continue
+        if not (0 <= nx < N and 0 <= ny < N):
+            continue
+
+        if grid[nx][ny] == 0:
+            continue
 
         ans += grid[nx][ny]
         grid[nx][ny] = 0
@@ -19,67 +23,62 @@ def attack(m):
 def move():
     global ans
 
-    x, y, d = ax, ay, 2     # 3, 3
+    x, y, d = ax, ay, 2
 
     coords = []
     nums = []
     while x != 0 or y != 0:
-        nx = x + dx[d]     # 3
-        ny = y + dy[d]     # 2
+        nx = x + dx[d]
+        ny = y + dy[d]
+        if grid[nx][ny] != 0:
+            nums.append(grid[nx][ny])
         coords.append((nx, ny))
-        if grid[nx][ny] != 0: nums.append(grid[nx][ny])
 
-        if nx <= ax and nx == ny + 1: d = 1
-        elif nx > ax and nx + ny == ax + ay: d = 0
-        elif nx > ax and nx == ny: d = 3
-        elif nx < ax and nx + ny == ax + ay: d = 2
+        if nx <= ax and nx == ny + 1:
+            d = 1
+        elif nx > ax and nx + ny == ax + ay:
+            d = 0
+        elif nx > ax and nx == ny:
+            d = 3
+        elif nx < ax and nx + ny == ax + ay:
+            d = 2
 
-        x = nx
-        y = ny
+        x, y = nx, ny
+
+    # 폭발 처리 로직
     while True:
         dp = [1] * len(nums)
         for i in range(1, len(nums)):
-            if nums[i-1] == nums[i]:
-                dp[i] = dp[i-1] + 1
-            else:
-                dp[i] = 1
-        for i in range(len(dp)-1, 0, -1):
-            if nums[i] == nums[i-1]:
-                dp[i-1] = dp[i]
-        s = set()
-        for i in range(len(dp)):
+            if nums[i] == nums[i - 1]:
+                dp[i] = dp[i - 1] + 1
+        exploded = False
+        for i in range(len(dp) - 1, -1, -1):
             if dp[i] >= 4:
-                s.add((nums[i], dp[i]))
-        temp = list(s)
-        for n, c in temp:
-            ans += n * c
-        res = []
-        for i in range(len(nums)):
-            if dp[i] < 4:
-                res.append(nums[i])
-        if len(nums) == len(res):
+                ans += nums[i] * dp[i]
+                exploded = True
+                for j in range(dp[i]):
+                    nums[i - j] = 0  # 폭발한 그룹을 0으로 설정
+        if not exploded:
             break
-        nums = res
+        nums = [num for num in nums if num != 0]  # 남은 숫자만 모아줌
 
+    # 숫자 그룹 재정렬 및 grid 반영
     nums.append(0)
-    num = nums[0]
-    cnt = 1
+    num, cnt = nums[0], 1
     ret = []
     for i in range(1, len(nums)):
         if nums[i] == num:
             cnt += 1
         else:
-            ret.append(cnt)
-            ret.append(num)
-            num = nums[i]
-            cnt = 1
-    tmp2 = [[0] * N for _ in range(N)]
+            ret.extend([cnt, num])
+            num, cnt = nums[i], 1
+    new_grid = [[0] * N for _ in range(N)]
     for i in range(len(ret)):
-        try:
-            tmp2[coords[i][0]][coords[i][1]] = ret[i]
-        except:
+        if i >= len(coords):
             break
-    return tmp2
+        x, y = coords[i]
+        new_grid[x][y] = ret[i]
+    return new_grid
 
 
 if __name__ == "__main__":
@@ -90,13 +89,6 @@ if __name__ == "__main__":
 
     ans = 0
     for m in range(M):
-        # print(f'====={m}=====')
         attack(m)
-        # for row in grid:
-        #     print(*row)
-        # print()
         grid = move()
-        # for row in grid:
-        #     print(*row)
-        # print()
     print(ans)
