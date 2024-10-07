@@ -36,7 +36,6 @@ def move():
 
         x = nx
         y = ny
-
     while True:
         dp = [1] * len(nums)
         for i in range(1, len(nums)):
@@ -44,7 +43,7 @@ def move():
                 dp[i] = dp[i-1] + 1
             else:
                 dp[i] = 1
-        for i in range(len(dp)-1, -1, -1):
+        for i in range(len(dp)-1, 0, -1):
             if nums[i] == nums[i-1]:
                 dp[i-1] = dp[i]
         s = set()
@@ -61,9 +60,6 @@ def move():
         if len(nums) == len(res):
             break
         nums = res
-    #     print(dp)
-    #
-    # print(nums)
 
     nums.append(0)
     num = nums[0]
@@ -77,7 +73,6 @@ def move():
             ret.append(num)
             num = nums[i]
             cnt = 1
-    # print(ret)
     tmp2 = [[0] * N for _ in range(N)]
     for i in range(len(ret)):
         try:
@@ -95,8 +90,13 @@ if __name__ == "__main__":
 
     ans = 0
     for m in range(M):
+        # print(f'====={m}=====')
         attack(m)
+        # for row in grid:
+        #     print(*row)
+        # print()
         grid = move()
         # for row in grid:
         #     print(*row)
+        # print()
     print(ans)
