@@ -47,13 +47,17 @@ def move_monster():
                 d = i
                 nx = x + dx[d]
                 ny = y + dy[d]
+                can = True
                 while not can_go(nx, ny):
                     d = max(1, (d+1)%9)
                     nx = x + dx[d]
                     ny = y + dy[d]
-                    if d == i: break
+                    if d == i: 
+                        can = False
+                        break
             
-                nxt_grid[nx][ny].append(d)
+                if can: nxt_grid[nx][ny].append(d)
+                else: nxt_grid[x][y].append(d)
 
     return nxt_grid
 
@@ -77,10 +81,10 @@ def pacman_move(t):
             if not in_range(x, y): 
                 is_out_range = True
                 break
-            if visited[x][y]: continue
 
-            visited[x][y] = True
-            cnt += len(grid[x][y])
+            if not visited[x][y]:
+                cnt += len(grid[x][y])
+                visited[x][y] = True
         
         if cnt > M and not is_out_range:
             M_dir = dir
@@ -98,7 +102,6 @@ def dead_clear(t):
     for x in range(4):
         for y in range(4):
             if not dead_grid[x][y]: continue
-
             dead_grid[x][y] = [i for i in dead_grid[x][y] if i+2 > t]
 
 def done_duplicate():
@@ -106,6 +109,7 @@ def done_duplicate():
         for y in range(4):
             if not sub_grid[x][y]: continue
             grid[x][y].extend(sub_grid[x][y])
+            sub_grid[x][y].clear()
 
 if __name__ == "__main__":
     get_pacman_moves('')
@@ -124,46 +128,25 @@ if __name__ == "__main__":
     # Simulation
     for t in range(1, T+1):
         # print(f'====={t}=====')
-        clear_sub()
-
-        # print("=====GRID=====")
-        # for row in grid:
-        #     print(*row)
-
         try_duplicate()
-
-        # print("=====try_duplicate=====")
-        # for row in sub_grid:
-        #     print(*row)
 
         grid = move_monster()
 
-        # print("=====GRID=====")
-        # for row in grid:
-        #     print(*row)
-        
         pacman_move(t)
-
-        # print("=====GRID=====")
-        # for row in grid:
-        #     print(*row)
 
         dead_clear(t)
 
-        # print("=====GRID=====")
-        # for row in grid:
-        #     print(*row)
-
         done_duplicate()
 
-        # print(px, py)
-        # print("=====GRID=====")
         # for row in grid:
         #     print(*row)
-        # print("=====DEAD=====")
+        # print()
+        # for row in sub_grid:
+        #     print(*row)
+        # print()
         # for row in dead_grid:
         #     print(*row)
-
+        # print()
 
     ans = 0
     for x in range(4):
