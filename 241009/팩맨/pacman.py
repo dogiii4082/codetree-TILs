@@ -75,7 +75,7 @@ def pacman_move(t):
             y = y + pdy[int(d)]
 
             if not in_range(x, y): 
-                is_our_range = True
+                is_out_range = True
                 break
             if visited[x][y]: continue
 
