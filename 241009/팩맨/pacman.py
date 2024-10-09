@@ -69,17 +69,20 @@ def pacman_move(t):
         cnt = 0
         x = px
         y = py
+        is_out_range = False
         for d in dir:
             x = x + pdx[int(d)]
             y = y + pdy[int(d)]
 
-            if not in_range(x, y): break
+            if not in_range(x, y): 
+                is_our_range = True
+                break
             if visited[x][y]: continue
 
             visited[x][y] = True
             cnt += len(grid[x][y])
         
-        if cnt > M:
+        if cnt > M and not is_out_range:
             M_dir = dir
             M = cnt
 
@@ -96,7 +99,7 @@ def dead_clear(t):
         for y in range(4):
             if not dead_grid[x][y]: continue
 
-            dead_grid[x][y] = [i for i in dead_grid[x][y] if i > t-2]
+            dead_grid[x][y] = [i for i in dead_grid[x][y] if i+2 > t]
 
 def done_duplicate():
     for x in range(4):
